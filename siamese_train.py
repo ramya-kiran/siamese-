@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     true_positives = args.batch_size - tf.reduce_sum(tf.cast(tf.logical_or(predicted, actual), tf.float32))
 
-    true_positive_prop = true_positives/total_positives
+    true_positives_prop = true_positives/total_positives
 
     # calculate false positives
     false_positives = (args.batch_size - tf.reduce_sum(tf.cast(predicted, tf.float32))) - true_positives
@@ -78,9 +78,9 @@ if __name__ == '__main__':
             images, labels = sess.run(batch)
             images1, images2, labels1 = split_images(images, args.batch_size, labels)
             sess.run(train, feed_dict={X1: images1, X2: images2, y: labels1})
-            roc_file.write(str(false_positives_prop))
+            roc_file.write(str(sess.run(false_positives_prop, feed_dict={X1: images1, X2: images2, y: labels1})))
             roc_file.write(" ")
-            roc_file.write(str(true_positives_prop))
+            roc_file.write(str(sess.run(true_positives_prop, feed_dict={X1: images1, X2: images2, y: labels1})))
             roc_file.write("\n")
             #s = sess.run(merged_summary, feed_dict={X1: images1, X2: images2, y: labels1})
             #writer.add_summary(s, i)
