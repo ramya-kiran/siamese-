@@ -62,8 +62,8 @@ if __name__ == '__main__':
             images, labels = sess.run(batch)
             images1, images2, labels1 = split_images(images, args.batch_size, labels)
             sess.run(train, feed_dict={X1: images1, X2: images2, y: labels1})
-            s = sess.run(merged_summary, feed_dict={X1: images1, X2: images2, y: labels1})
-            writer.add_summary(s, i)
+            #s = sess.run(merged_summary, feed_dict={X1: images1, X2: images2, y: labels1})
+            #writer.add_summary(s, i)
             
             # Print training accuracy every 100 epochs
             if (i+1) % 8 == 0:
