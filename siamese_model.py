@@ -17,7 +17,7 @@ def model(image1, image2, args):
     # Flatten
     flatten_1 = tf.reshape(img1_conv3, [-1, 1*1*250])
     flatten_2 = tf.reshape(img2_conv3, [-1, 1*1*250])
-
+    
     # FC layer #1 (1*1*250) => (50)
     fc1_img1, fc1_img2 = fc_operations(flatten_1, flatten_2, "fc_1", 1*1*250, 50, activation=tf.nn.relu)
     fc1_img1 = tf.nn.l2_normalize(fc1_img1, dim=0, epsilon=1e-12)
@@ -55,9 +55,9 @@ def pool_operations(image1, image2, given_name, ksize_value, stride_value):
 
 def fc_operations(image1, image2, given_name, in_size, out_size, activation):
     with tf.variable_scope("pooling") as scope_fc:
-        fc_out1 = fc_layer(image1, given_name, in_size, out_size, activation=None)
+        fc_out1 = fc_layer(image1, given_name, in_size, out_size, activation)
         scope_fc.reuse_variables()
-        fc_out2 = fc_layer(image2, given_name, in_size, out_size, activation=None)
+        fc_out2 = fc_layer(image2, given_name, in_size, out_size, activation)
         
         return fc_out1, fc_out2
 

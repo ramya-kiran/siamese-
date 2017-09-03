@@ -7,7 +7,7 @@ import scipy.ndimage
 import numpy as np
 import argparse
 import os.path
-import cv2
+#import cv2
 
 WIDTH = 92
 HEIGHT = 56
@@ -50,10 +50,11 @@ def read_images(filenames):
             classes.append(class_name)
 
         class_index = classes.index(class_name)
-
+        
         print('Processing {} as class {}'.format(image, class_index))
         images[i] = scipy.ndimage.imread(image, mode='RGB')
         labels[i] = class_index
+        #labels[i] = lab_index
 
     return images, labels
 
@@ -61,6 +62,7 @@ def main():
     # Read arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('source', nargs='+', help='list of image(s)')
+   # parser.add_argument('label', help='label to be used')
     parser.add_argument('-o', '--output', default='result.tfrecords', help='output filename, default to result.tfrecords')
 
     args = parser.parse_args()
