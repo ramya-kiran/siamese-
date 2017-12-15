@@ -4,15 +4,15 @@ THRESHOLD = 1
 
 def model(image1, image2, args):
     # Convolution layer #1 (56x46x3) => (50x40x15)
-    img1_conv1, img2_conv1 = conv_operations(image1, image2, "conv1", 7, 3, 15)
+    img1_conv1, img2_conv1 = conv1_operations(image1, image2, "conv1", 7, 3, 15)
     pool1_img1, pool1_img2 = pool_operations(img1_conv1, img2_conv1, "pool1", [1,2,2,1], [1,2,2,1]) 
 
     # Convolution layer #2 (25x20x15) => (20x15x45)
-    img1_conv2, img2_conv2 = conv_operations(pool1_img1, pool1_img2, "conv2", 6, 15, 45)
+    img1_conv2, img2_conv2 = conv2_operations(pool1_img1, pool1_img2, "conv2", 6, 15, 45)
     pool2_img1, pool2_img2 = pool_operations(img1_conv2, img2_conv2, "pool2", [1,4,3,1], [1,4,3,1])
 
     # Convolutional layer #3 (5x5x45) => (1x1x250)
-    img1_conv3, img2_conv3 = conv_operations(pool2_img1, pool2_img2, "conv3", 5, 45, 250)
+    img1_conv3, img2_conv3 = conv3_operations(pool2_img1, pool2_img2, "conv3", 5, 45, 250)
 
     # Flatten
     flatten_1 = tf.reshape(img1_conv3, [-1, 1*1*250])
@@ -26,13 +26,32 @@ def model(image1, image2, args):
     return fc1_img1, fc1_img2
 
 
-def conv_operations(image1, image2, given_name, filter_size, in_size, out_size):
+def conv1_operations(image1, image2, given_name, filter_size, in_size, out_size):
     with  tf.variable_scope("convolution") as scope_conv:
         out_1 = conv_layer(image1, filter_size, in_size, out_size, name=given_name)
         scope_conv.reuse_variables()
         out_2 = conv_layer(image2, filter_size, in_size, out_size, name=given_name)
         
         return out_1, out_2
+
+
+def conv2_operations(image1, image2, given_name, filter_size, in_size, out_size):
+    with  tf.variable_scope("convolution") as scope_conv:
+        out_1 = conv_layer(image1, filter_size, in_size, out_size, name=given_name)
+        scope_conv.reuse_variables()
+        out_2 = conv_layer(image2, filter_size, in_size, out_size, name=given_name)
+        
+        return out_1, out_2
+
+
+def conv3_operations(image1, image2, given_name, filter_size, in_size, out_size):
+    with  tf.variable_scope("convolution") as scope_conv:
+        out_1 = conv_layer(image1, filter_size, in_size, out_size, name=given_name)
+        scope_conv.reuse_variables()
+        out_2 = conv_layer(image2, filter_size, in_size, out_size, name=given_name)
+        
+        return out_1, out_2
+
 
 def conv_layer(in_image, fil_size, no_in, no_out, name):
     with tf.variable_scope(name):

@@ -77,22 +77,18 @@ if __name__ == '__main__':
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-        # roc_file = open("roc_file.txt", "a")
-
         for i in range(args.epochs):
             images, labels = sess.run(batch)
             images1, images2, labels1 = split_images(images, args.batch_size, labels)
             sess.run(train, feed_dict={X1: images1, X2: images2, y: labels1})
             
-            
             # Print training accuracy every 100 epochs
-            if (i+1) % 100 == 0:
-                #print(sess.run(loss, feed_dict={X1: images1, X2:images2, y:labels1}))
+            if (i+1) % 5 == 0:
                 print('loss val {}: {:.2f}'.format(i+1, sess.run(loss_val, feed_dict={X1: images1, X2:images2, y: labels1})))
-                #print('distance {}: {:.2f}'.format(i+1, sess.run(distance, feed_dict={X1: images1, X2:images2, y: labels1})))
-                
-            if (i+1) % 1000 == 0:
+                      
+            if (i+1) % 11 == 0:
                 params = saver.save(sess, '{}_{}.ckpt'.format(args.output, i+1))
+                print('loss val {}: {:.2f}'.format(i+1, sess.run(loss_val, feed_dict={X1: images1, X2:images2, y: labels1})))
                 print('Model saved: {}'.format(params))
                 
         coord.request_stop()
